@@ -5,7 +5,6 @@ const FooterComponent = styled.footer`
     background-color: #383838;
     text-align: center;
     padding: 10px;
-    position: fixed;
     bottom: 0;
     left: 0;
     right: 0;

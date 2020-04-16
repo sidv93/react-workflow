@@ -8,7 +8,6 @@ const HeaderComponent = styled.header`
     color: white;
     font-size: 2rem;
     padding: 20px;
-    position: fixed;
     top: 0;
     left: 0;
     right: 0;
