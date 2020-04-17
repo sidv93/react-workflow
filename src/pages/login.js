@@ -1,20 +1,29 @@
 import React from 'react';
 import styled from 'styled-components';
 import SigninForm from '../components/SigninForm';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
 
 const LoginContainer = styled.div`
-    /* height: 100%; */
     box-sizing: border-box;
     display: flex;
     align-items: center;
     justify-content: center;
 `
 const Login = () => {
+    const onSubmit = async (loginData) => {
+        console.log('in submit', loginData);
+        const res = await fetch('http://localhost:3000/login', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json;charset=UTF-8',
+            },
+            body: JSON.stringify(loginData)
+        });        
+        const response = await res.json();
+        
+    }
     return (
         <LoginContainer>
-            <SigninForm />
+            <SigninForm onSubmit={onSubmit} />
         </LoginContainer>
     )
 };

@@ -27,7 +27,7 @@ function App() {
     <MainContainer>
       <Header text={headerText} />
       <ContentContainer>
-        <Dashboard />
+        <Login />
       </ContentContainer>
       <Footer text={footerText} />
     </MainContainer>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const InputComponent = styled.input`
@@ -32,13 +32,21 @@ const SigninFormContainer = styled.div`
     width: 350px;
 `;
 
-const SigninForm = () => {
+const SigninForm = ({onSubmit}) => {
+    const [loginData, setLoginData] = useState({username: '', password: ''});
+    const handleChange = (event) => {
+        setLoginData({...loginData, [event.target.name]: event.target.value});
+    }
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        onSubmit(loginData);
+    }
     return (
         <SigninFormContainer>
-            <form>
+            <form onSubmit={handleSubmit}>
                 <h3 style={{fontSize: '2.4rem'}}>Please sign in</h3>
-                <InputComponent type="text" placeholder="Username"/>
-                <InputComponent type="password" placeholder="Password"/>
+                <InputComponent type="text" value={loginData.username} name="username" onChange={handleChange} placeholder="Username"/>
+                <InputComponent type="password" value={loginData.password} name="password" onChange={handleChange} placeholder="Password"/>
                 <RememberMe />
                 <SubmitComponent type="submit" value="Sign in" />
             </form>
