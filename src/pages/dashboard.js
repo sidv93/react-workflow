@@ -47,11 +47,18 @@ const Dashboard = ({username}) => {
     //     },
     // ];
     const [ boards, setBoards ] = useState([]);
-    useEffect(() => {
+    useEffect(async () => {
         if(!username) {
             return;
         }
-        
+        const res = await fetch(`http://localhost:3000/boards?username=${username}`, {
+            method: 'GET'
+        });
+        const response = await res.json();
+        console.log('boards', response.data);
+        if(response.status === 'success') {
+            setBoards(response.data);
+        }
     })
     const history = useHistory();
     const handleClick = (board) => {

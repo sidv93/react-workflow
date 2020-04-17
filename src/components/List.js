@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Card from './Card';
 
@@ -46,11 +46,25 @@ const OrderedList = styled.ul`
     padding: 0;
 `;
 
-const List = ({name}) => {
+const List = ({listName}) => {
+    const [cards, setCards] = useState([]);
+    useEffect(async () => {
+        if(!listName) {
+            return;
+        }
+        const res = await fetch(`http://localhost:3000/cards?listName=${listName}`, {
+            method: 'GET'
+        });
+        const response = await res.json();
+        console.log('cards', response.data);
+        if(response.status === 'success') {
+            setCards(response.data);
+        }
+    })
     return (
         <ListComponent>
             <ListHeader>
-                <h3>{name}</h3>
+                <h3>{listName}</h3>
                 <HeaderOptionsContainer>
                     <HeaderOptions><i className="fa fa-plus-square" /></HeaderOptions>
                     <HeaderOptions><i className="fa fa-trash" /></HeaderOptions>
