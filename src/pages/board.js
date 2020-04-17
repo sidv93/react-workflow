@@ -1,10 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
 import AddButton from '../components/AddButton';
 import CloseButton from '../components/CloseButton';
 import List from '../components/List';
+import { useParams } from 'react-router-dom';
 
 const BoardContainer = styled.div`
     max-width: 100vw;
@@ -12,6 +11,7 @@ const BoardContainer = styled.div`
 `;
 
 const Board = () => {
+    const { boardName } = useParams();
     return (
         <BoardContainer>
             <CloseButton />

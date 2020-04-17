@@ -22,7 +22,7 @@ const BoardBody = styled.div`
     font-size: 1rem;
 `;
 
-const Board = ({date, name}) => {
+const Board = ({date, name, handleClick}) => {
     return (
         <BoardComponent>
             <BoardHeader>
@@ -31,7 +31,7 @@ const Board = ({date, name}) => {
                     <i className="fa fa-times" />
                 </span>
             </BoardHeader>
-            <BoardBody>
+            <BoardBody onClick={() => handleClick(name)}>
                 <p>{name}</p>
             </BoardBody>
         </BoardComponent>

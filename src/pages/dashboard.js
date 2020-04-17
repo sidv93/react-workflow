@@ -1,52 +1,72 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Board from '../components/Board';
 import AddButton from '../components/AddButton';
+import { useHistory } from 'react-router-dom';
 
 const DashboardContainer = styled.div`
     max-width: 100vw;
     box-sizing: border-box;
 `;
 
-const Dashboard = () => {
-    const boards = [
-        {
-            boardName: 'board',
-            date: new Date().toLocaleDateString(),
-        },
-        {
-            boardName: 'board',
-            date: new Date().toLocaleDateString(),
-        },{
-            boardName: 'board',
-            date: new Date().toLocaleDateString(),
-        },{
-            boardName: 'board',
-            date: new Date().toLocaleDateString(),
-        },{
-            boardName: 'board',
-            date: new Date().toLocaleDateString(),
-        },{
-            boardName: 'board',
-            date: new Date().toLocaleDateString(),
-        },{
-            boardName: 'board',
-            date: new Date().toLocaleDateString(),
-        },{
-            boardName: 'board',
-            date: new Date().toLocaleDateString(),
-        },
-    ];
+const BoardsContainer = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    margin: 30px;
+    align-items: center;
+    justify-content: center;
+`;
+
+const Dashboard = ({username}) => {
+    // const boards = [
+    //     {
+    //         boardName: 'board',
+    //         date: new Date().toLocaleDateString(),
+    //     },
+    //     {
+    //         boardName: 'board',
+    //         date: new Date().toLocaleDateString(),
+    //     },{
+    //         boardName: 'board',
+    //         date: new Date().toLocaleDateString(),
+    //     },{
+    //         boardName: 'board',
+    //         date: new Date().toLocaleDateString(),
+    //     },{
+    //         boardName: 'board',
+    //         date: new Date().toLocaleDateString(),
+    //     },{
+    //         boardName: 'board',
+    //         date: new Date().toLocaleDateString(),
+    //     },{
+    //         boardName: 'board',
+    //         date: new Date().toLocaleDateString(),
+    //     },{
+    //         boardName: 'board',
+    //         date: new Date().toLocaleDateString(),
+    //     },
+    // ];
+    const [ boards, setBoards ] = useState([]);
+    useEffect(() => {
+        if(!username) {
+            return;
+        }
+        
+    })
+    const history = useHistory();
+    const handleClick = (board) => {
+        history.push(`/board/:${board}`);
+    }
     return (
         <DashboardContainer>
-            <div style={{display: 'flex', flexWrap: 'wrap', margin: '30px', alignItems: 'center', justifyContent: 'center'}}>
+            <BoardsContainer>
                 {
                     boards.map((board,index) => {
                         const name = `${board.boardName}${index}`;
-                        return <Board date={board.date} name={name} key={name} />
+                        return <Board date={board.date} name={name} handleClick={handleClick} key={name} />
                     })
                 }
-            </div>
+            </BoardsContainer>
             <AddButton />
         </DashboardContainer>
     )
