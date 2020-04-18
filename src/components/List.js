@@ -63,7 +63,7 @@ const List = ({list}) => {
             }
         }
         fetchCards();
-    }, [])
+    }, [list])
     return (
         <ListComponent>
             <ListHeader>

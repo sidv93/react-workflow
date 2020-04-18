@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import Board from '../components/Board';
 import AddButton from '../components/AddButton';
 import { useHistory } from 'react-router-dom';
+import 'react-responsive-modal/styles.css';
+import Modal from 'react-responsive-modal';
 
 const DashboardContainer = styled.div`
     max-width: 100vw;
@@ -19,6 +21,14 @@ const BoardsContainer = styled.div`
 
 const Dashboard = ({username}) => {
     const [ boards, setBoards ] = useState([]);
+    const [ isModalOpen, setModalState ] = useState(false);
+    const [ boardName, setBoardName ] = useState('');
+    const openModal = () => {
+        setModalState(true);
+    }
+    const closeModal = () => {
+        setModalState(false);
+    }
     useEffect(() => {
         const fetchBoards = async () => {
             if(!username) {
@@ -34,10 +44,18 @@ const Dashboard = ({username}) => {
             }
         }
         fetchBoards();
-    }, [])
+    }, [username])
     const history = useHistory();
     const handleClick = (boardId) => {
         history.push(`/board/${boardId}`);
+    }
+    const handleBoardNameChange = (event) => {
+        setBoardName(event.target.value);
+    }
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        console.log('boardname', boardName);
+        closeModal();
     }
     return (
         <DashboardContainer>
@@ -48,7 +66,16 @@ const Dashboard = ({username}) => {
                     })
                 }
             </BoardsContainer>
-            <AddButton />
+            <AddButton onClick={openModal} />
+            <Modal open={isModalOpen} onClose={closeModal} center>
+                <h2>Create Board</h2>
+                <form onSubmit={handleSubmit}>
+                    <label htmlFor="boardName" />
+                    <input type="text" name="boardName" value={boardName} onChange={handleBoardNameChange} placeholder="Board name" />
+                    <input type="submit" value="Submit" />
+                </form>
+                
+            </Modal>
         </DashboardContainer>
     )
 };

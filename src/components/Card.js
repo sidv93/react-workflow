@@ -30,7 +30,7 @@ const CardOptions = styled.div`
 const Card = ({card}) => {
     return (
         <CardComponent>
-            <CardInput type="text" value={card.data} />
+            <CardInput type="text" />
             <CardOptionsContainer>
                 <CardOptions><i className="fa fa-check" /></CardOptions>
                 <CardOptions><i className="fa fa-times" /></CardOptions>

@@ -19,9 +19,9 @@ const AddButtonComponent = styled.div`
     text-align: center;
 ` ;
 
-const AddButton = () => {
+const AddButton = ({onClick}) => {
     return (
-        <AddButtonContainer>
+        <AddButtonContainer onClick={onClick}>
             <AddButtonComponent>+</AddButtonComponent>
         </AddButtonContainer>
     )

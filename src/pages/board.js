@@ -4,6 +4,8 @@ import AddButton from '../components/AddButton';
 import CloseButton from '../components/CloseButton';
 import List from '../components/List';
 import { useParams } from 'react-router-dom';
+import 'react-responsive-modal/styles.css';
+import Modal from 'react-responsive-modal';
 
 const BoardContainer = styled.div`
     max-width: 100vw;
@@ -20,8 +22,9 @@ const ListsContainer = styled.div`
 
 const Board = () => {
     const { boardId } = useParams();
-    console.log('board', boardId);
     const [ lists, setLists ] = useState([]);
+    const [ isModalOpen, setModalState ] = useState(false);
+    const [ listName, setListName ] = useState('');
     useEffect(() => {
         const fetchLists = async () => {
             if(!boardId) {
@@ -37,7 +40,22 @@ const Board = () => {
             }
         }
         fetchLists();
-    }, [])
+    }, [boardId]);
+
+    const handleListNameChange = (event) => {
+        setListName(event.target.value);
+    }
+    const handleListNameSubmit = (event) => {
+        event.preventDefault();
+        console.log('listname', listName);
+        closeModal();
+    }
+    const openModal = () => {
+        setModalState(true);
+    }
+    const closeModal = () => {
+        setModalState(false);
+    }
     return (
         <BoardContainer>
             <CloseButton />
@@ -46,7 +64,15 @@ const Board = () => {
                     lists.map(list => <List list={list} key={list.id} />)
                 }
             </ListsContainer>
-            <AddButton />
+            <AddButton onClick={openModal} />
+            <Modal open={isModalOpen} onClose={closeModal} center>
+                <h2>Create List</h2>
+                <form onSubmit={handleListNameSubmit}>
+                    <label htmlFor="listname" />
+                    <input type="text" name="listame" value={listName} onChange={handleListNameChange} placeholder="List name" />
+                    <input type="submit" value="Submit" />
+                </form>
+            </Modal>
         </BoardContainer>
     )
 };
