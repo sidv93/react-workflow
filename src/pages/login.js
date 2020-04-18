@@ -9,7 +9,7 @@ const LoginContainer = styled.div`
     align-items: center;
     justify-content: center;
 `
-const Login = () => {
+const Login = ({setUsername}) => {
     const history = useHistory();
     const onSubmit = async (loginData) => {
         console.log('in submit', loginData);
@@ -23,6 +23,7 @@ const Login = () => {
         const response = await res.json();
         console.log(response);
         if(response.status === 'success') {
+            setUsername(loginData.username)
             return history.push('/dashboard');
         }
         console.log('login failed');

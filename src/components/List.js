@@ -46,25 +46,28 @@ const OrderedList = styled.ul`
     padding: 0;
 `;
 
-const List = ({listName}) => {
+const List = ({list}) => {
     const [cards, setCards] = useState([]);
-    useEffect(async () => {
-        if(!listName) {
-            return;
+    useEffect(() => {
+        const fetchCards = async () => {
+            if(!list) {
+                return;
+            }
+            const res = await fetch(`http://localhost:3000/cards/${list.id}`, {
+                method: 'GET'
+            });
+            const response = await res.json();
+            console.log('cards', response.data);
+            if(response.status === 'success') {
+                setCards(response.data);
+            }
         }
-        const res = await fetch(`http://localhost:3000/cards?listName=${listName}`, {
-            method: 'GET'
-        });
-        const response = await res.json();
-        console.log('cards', response.data);
-        if(response.status === 'success') {
-            setCards(response.data);
-        }
-    })
+        fetchCards();
+    }, [])
     return (
         <ListComponent>
             <ListHeader>
-                <h3>{listName}</h3>
+                <h3>{list.name}</h3>
                 <HeaderOptionsContainer>
                     <HeaderOptions><i className="fa fa-plus-square" /></HeaderOptions>
                     <HeaderOptions><i className="fa fa-trash" /></HeaderOptions>
@@ -73,11 +76,9 @@ const List = ({listName}) => {
             <HorizontalLine />
             <CardListContainer>
                 <OrderedList>
-                    <Card cardText="hello" />
-                    <Card cardText="hello" />
-                    <Card cardText="hello" />
-                    <Card cardText="hello" />
-                    <Card cardText="hello" />
+                    {
+                        cards.map(card => <Card card={card} key={card.id} />)
+                    }
                 </OrderedList>
             </CardListContainer>
         </ListComponent>

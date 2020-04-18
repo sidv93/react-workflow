@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Board from './pages/board';
 import Login from './pages/login';
@@ -24,6 +24,8 @@ const ContentContainer = styled.div`
 function App() {
   const headerText = "Welcome to Workflow!";
   const footerText = "Copyright © 2020 Asteria Aerospace | All Rights Reserved.";
+  const [username, setUsername] = useState('');
+
   return (
     <Router>
       <MainContainer>
@@ -31,13 +33,13 @@ function App() {
         <ContentContainer>
         <Switch>
           <Route path="/dashboard">
-            <Dashboard />
+            <Dashboard username={username} />
           </Route>
-          <Route path="/board/:boardName">
+          <Route path="/board/:boardId">
             <Board />
           </Route>
           <Route path="/">
-            <Login />
+            <Login setUsername={setUsername} />
           </Route>
         </Switch>
         </ContentContainer>

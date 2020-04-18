@@ -18,59 +18,33 @@ const BoardsContainer = styled.div`
 `;
 
 const Dashboard = ({username}) => {
-    // const boards = [
-    //     {
-    //         boardName: 'board',
-    //         date: new Date().toLocaleDateString(),
-    //     },
-    //     {
-    //         boardName: 'board',
-    //         date: new Date().toLocaleDateString(),
-    //     },{
-    //         boardName: 'board',
-    //         date: new Date().toLocaleDateString(),
-    //     },{
-    //         boardName: 'board',
-    //         date: new Date().toLocaleDateString(),
-    //     },{
-    //         boardName: 'board',
-    //         date: new Date().toLocaleDateString(),
-    //     },{
-    //         boardName: 'board',
-    //         date: new Date().toLocaleDateString(),
-    //     },{
-    //         boardName: 'board',
-    //         date: new Date().toLocaleDateString(),
-    //     },{
-    //         boardName: 'board',
-    //         date: new Date().toLocaleDateString(),
-    //     },
-    // ];
     const [ boards, setBoards ] = useState([]);
-    useEffect(async () => {
-        if(!username) {
-            return;
+    useEffect(() => {
+        const fetchBoards = async () => {
+            if(!username) {
+                return;
+            }
+            const res = await fetch(`http://localhost:3000/boards/${username}`, {
+                method: 'GET'
+            });
+            const response = await res.json();
+            console.log('boards', response.data);
+            if(response.status === 'success') {
+                setBoards(response.data);
+            }
         }
-        const res = await fetch(`http://localhost:3000/boards?username=${username}`, {
-            method: 'GET'
-        });
-        const response = await res.json();
-        console.log('boards', response.data);
-        if(response.status === 'success') {
-            setBoards(response.data);
-        }
-    })
+        fetchBoards();
+    }, [])
     const history = useHistory();
-    const handleClick = (board) => {
-        history.push(`/board/:${board}`);
+    const handleClick = (boardId) => {
+        history.push(`/board/${boardId}`);
     }
     return (
         <DashboardContainer>
             <BoardsContainer>
                 {
                     boards.map((board,index) => {
-                        const name = `${board.boardName}${index}`;
-                        return <Board date={board.date} name={name} handleClick={handleClick} key={name} />
+                        return <Board board={board} handleClick={handleClick} key={board.id} />
                     })
                 }
             </BoardsContainer>

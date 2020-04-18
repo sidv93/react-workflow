@@ -27,10 +27,10 @@ const CardOptions = styled.div`
     cursor: pointer;
 `;
 
-const Card = ({cardText}) => {
+const Card = ({card}) => {
     return (
         <CardComponent>
-            <CardInput type="text" />
+            <CardInput type="text" value={card.data} />
             <CardOptionsContainer>
                 <CardOptions><i className="fa fa-check" /></CardOptions>
                 <CardOptions><i className="fa fa-times" /></CardOptions>

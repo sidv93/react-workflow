@@ -19,27 +19,31 @@ const ListsContainer = styled.div`
 `;
 
 const Board = () => {
-    const { boardName } = useParams();
+    const { boardId } = useParams();
+    console.log('board', boardId);
     const [ lists, setLists ] = useState([]);
-    useEffect(async () => {
-        if(!boardName) {
-            return;
+    useEffect(() => {
+        const fetchLists = async () => {
+            if(!boardId) {
+                return;
+            }
+            const res = await fetch(`http://localhost:3000/lists/${boardId}`, {
+                method: 'GET'
+            });
+            const response = await res.json();
+            console.log('lists', response.data);
+            if(response.status === 'success') {
+                setLists(response.data);
+            }
         }
-        const res = await fetch(`http://localhost:3000/lists?boardName=${boardName}`, {
-            method: 'GET'
-        });
-        const response = await res.json();
-        console.log('lists', response.data);
-        if(response.status === 'success') {
-            setLists(response.data);
-        }
-    })
+        fetchLists();
+    }, [])
     return (
         <BoardContainer>
             <CloseButton />
             <ListsContainer>
                 {
-                    lists.map(list => <List name={list.name} key={list.name} />)
+                    lists.map(list => <List list={list} key={list.id} />)
                 }
             </ListsContainer>
             <AddButton />
