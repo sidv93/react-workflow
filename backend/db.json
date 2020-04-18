@@ -5,7 +5,35 @@
       "password": "123"
     }
   ],
-  "boards": [],
-  "lists": [],
-  "cards": []
+  "boards": [
+    {
+      "id": "3b8ce1f7-b8c0-4e76-aeef-bae019867c73",
+      "name": "posts",
+      "createdAt": 1587229768280,
+      "username": "sid"
+    },
+    {
+      "id": "3b77f789-de05-4bd0-9155-afe4975c3c07",
+      "name": "teams",
+      "createdAt": 1587230049354,
+      "username": "sid"
+    }
+  ],
+  "lists": [
+    {
+      "id": "84b622f0-0d56-4ef2-b5e1-03a18ebc93a3",
+      "boardId": "3b8ce1f7-b8c0-4e76-aeef-bae019867c73",
+      "name": "postList",
+      "createdAt": 1587229828326
+    }
+  ],
+  "cards": [
+    {
+      "id": "27bbe1ee-19b8-4277-96b0-6baa11119dda",
+      "listId": "84b622f0-0d56-4ef2-b5e1-03a18ebc93a3",
+      "data": "new card",
+      "createdAt": 1587229876961,
+      "updatedAt": 1587229876961
+    }
+  ]
 }

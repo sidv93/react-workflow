@@ -18,12 +18,12 @@ const createBoard = (req, res) => {
         return res.json({
             status: 'error',
             message: 'Board already exists'
-        })
+        });
     }
     const newBoard = {
         id: uuid(),
         name: boardName,
-        createdAt: new Date().toLocaleDateString(),
+        createdAt: Date.now(),
         username
     };
 
@@ -35,6 +35,25 @@ const createBoard = (req, res) => {
         data: newBoard
     });
 };
+
+const getBoards = (req, res) => {
+    const { username } = req.params;
+    if(!username) {
+        console.log('No user id in request');
+        res.status(status.BAD_REQUEST);
+        return res.json({
+            status: 'error',
+            message: 'No user id in request'
+        });
+    }
+    const boards = db.get('boards').filter({username}).value();
+    console.log(`${boards.length} boards found`);
+    res.status(status.OK);
+    return res.json({
+        status: 'success',
+        data: boards
+    });
+}
 
 const deleteBoard = (req, res) => {
     const { boardId } = req.params;
@@ -54,7 +73,7 @@ const deleteBoard = (req, res) => {
             message: 'Board does not exist'
         });
     }
-    db.get('boards').value().filter(board => board.id !== boardId).write();
+    db.get('boards').remove({id: boardId}).write();
     console.log('Board deleted');
     res.status(status.OK);
     return res.json({
@@ -65,5 +84,6 @@ const deleteBoard = (req, res) => {
 
 export default {
     createBoard,
+    getBoards,
     deleteBoard
 };
