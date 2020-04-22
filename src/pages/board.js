@@ -65,7 +65,7 @@ const Board = ({Loader}) => {
         <BoardContainer>
             <CloseButton />
             <ListsContainer>
-                { isLoading && <Loader /> }
+                { isLoading && <Loader size="large" /> }
                 {
                     lists.map(list => <List list={list} key={list.id} />)
                 }

@@ -65,9 +65,9 @@ const Dashboard = ({username, Loader}) => {
     return (
         <DashboardContainer>
             <BoardsContainer>
-                {isLoading && <Loader />}
+                {isLoading && <Loader size="large" />}
                 {
-                    boards.map((board,index) => {
+                    boards.map(board => {
                         return <Board board={board} handleClick={handleClick} key={board.id} />
                     })
                 }
