@@ -6,6 +6,7 @@ import List from '../components/List';
 import { useParams } from 'react-router-dom';
 import 'react-responsive-modal/styles.css';
 import Modal from 'react-responsive-modal';
+import { withLoader } from '../common/utils';
 
 const BoardContainer = styled.div`
     max-width: 100vw;
@@ -20,14 +21,17 @@ const ListsContainer = styled.div`
     justify-content: center;
 `;
 
-const Board = () => {
+const Board = ({Loader}) => {
     const { boardId } = useParams();
     const [ lists, setLists ] = useState([]);
     const [ isModalOpen, setModalState ] = useState(false);
     const [ listName, setListName ] = useState('');
+    const [ isLoading, setLoading ] = useState(false);
     useEffect(() => {
+        setLoading(true);
         const fetchLists = async () => {
             if(!boardId) {
+                setLoading(false);
                 return;
             }
             const res = await fetch(`http://localhost:3000/lists/${boardId}`, {
@@ -38,8 +42,9 @@ const Board = () => {
             if(response.status === 'success') {
                 setLists(response.data);
             }
+            setLoading(false);
         }
-        fetchLists();
+        setTimeout(fetchLists, 3000);
     }, [boardId]);
 
     const handleListNameChange = (event) => {
@@ -60,6 +65,7 @@ const Board = () => {
         <BoardContainer>
             <CloseButton />
             <ListsContainer>
+                { isLoading && <Loader /> }
                 {
                     lists.map(list => <List list={list} key={list.id} />)
                 }
@@ -77,4 +83,4 @@ const Board = () => {
     )
 };
 
-export default Board;
+export default withLoader(Board);

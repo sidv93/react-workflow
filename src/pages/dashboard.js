@@ -5,6 +5,7 @@ import AddButton from '../components/AddButton';
 import { useHistory } from 'react-router-dom';
 import 'react-responsive-modal/styles.css';
 import Modal from 'react-responsive-modal';
+import { withLoader } from '../common/utils';
 
 const DashboardContainer = styled.div`
     max-width: 100vw;
@@ -19,10 +20,11 @@ const BoardsContainer = styled.div`
     justify-content: center;
 `;
 
-const Dashboard = ({username}) => {
+const Dashboard = ({username, Loader}) => {
     const [ boards, setBoards ] = useState([]);
     const [ isModalOpen, setModalState ] = useState(false);
     const [ boardName, setBoardName ] = useState('');
+    let [ isLoading, setLoading ] = useState(false);
     const openModal = () => {
         setModalState(true);
     }
@@ -30,8 +32,10 @@ const Dashboard = ({username}) => {
         setModalState(false);
     }
     useEffect(() => {
+        setLoading(true);
         const fetchBoards = async () => {
             if(!username) {
+                setLoading(false);
                 return;
             }
             const res = await fetch(`http://localhost:3000/boards/${username}`, {
@@ -42,8 +46,9 @@ const Dashboard = ({username}) => {
             if(response.status === 'success') {
                 setBoards(response.data);
             }
+            setLoading(false);
         }
-        fetchBoards();
+        setTimeout(fetchBoards, 3000);
     }, [username])
     const history = useHistory();
     const handleClick = (boardId) => {
@@ -60,6 +65,7 @@ const Dashboard = ({username}) => {
     return (
         <DashboardContainer>
             <BoardsContainer>
+                {isLoading && <Loader />}
                 {
                     boards.map((board,index) => {
                         return <Board board={board} handleClick={handleClick} key={board.id} />
@@ -80,4 +86,4 @@ const Dashboard = ({username}) => {
     )
 };
 
-export default Dashboard;
+export default withLoader(Dashboard);
