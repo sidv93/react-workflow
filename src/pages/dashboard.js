@@ -6,6 +6,7 @@ import { useHistory } from 'react-router-dom';
 import 'react-responsive-modal/styles.css';
 import Modal from 'react-responsive-modal';
 import { withLoader } from '../common/utils';
+import authStore from '../common/authstore';
 
 const DashboardContainer = styled.div`
     max-width: 100vw;
@@ -20,11 +21,12 @@ const BoardsContainer = styled.div`
     justify-content: center;
 `;
 
-const Dashboard = ({username, Loader}) => {
+const Dashboard = ({Loader}) => {
     const [ boards, setBoards ] = useState([]);
     const [ isModalOpen, setModalState ] = useState(false);
     const [ boardName, setBoardName ] = useState('');
     let [ isLoading, setLoading ] = useState(false);
+    const username = authStore.userDetails.username;
     const openModal = () => {
         setModalState(true);
     }

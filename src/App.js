@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Board from './pages/board';
 import Login from './pages/login';
 import Dashboard from './pages/dashboard';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+import authStore from './common/authstore';
 
 const MainContainer = styled.div`
   min-height: 100vh;
@@ -22,9 +23,8 @@ const ContentContainer = styled.div`
 `;
 
 function App() {
-  const headerText = "Welcome to Workflow!";
-  const footerText = "Copyright © 2020 Asteria Aerospace | All Rights Reserved.";
-  const [username, setUsername] = useState('');
+  const headerText = 'Welcome to Workflow!';
+  const footerText = 'Copyright © 2020 Asteria Aerospace | All Rights Reserved.';
 
   return (
     <Router>
@@ -32,15 +32,10 @@ function App() {
         <Header text={headerText} />
         <ContentContainer>
         <Switch>
-          <Route path="/dashboard">
-            <Dashboard username={username} />
-          </Route>
-          <Route path="/board/:boardId">
-            <Board />
-          </Route>
-          <Route path="/">
-            <Login setUsername={setUsername} />
-          </Route>
+          <PrivateRoute path='/dashboard' component={Dashboard} />
+          <PrivateRoute path='/board/:boardId' component={Board} />
+          <Route path='/login' component={Login} />
+          <Redirect path='/' to="/dashboard" />
         </Switch>
         </ContentContainer>
         <Footer text={footerText} />
@@ -48,5 +43,16 @@ function App() {
     </Router>
   );
 }
+
+const PrivateRoute = ({component: Component, ...rest}) => (
+  <Route {...rest} render={(props) => (
+    authStore.isAuthenticated === true
+      ? <Component {...props} />
+      : <Redirect to={{
+        pathname: '/login',
+        state: { from: props.location }
+      }} /> 
+  )} />
+)
 
 export default App;

@@ -1,5 +1,7 @@
 import db from './db';
 import status from 'http-status';
+import { v4 as uuid } from 'uuid';
+import { add } from 'date-fns';
 
 const login = (req, res) => {
     const { username, password } = req.body;
@@ -17,7 +19,8 @@ const login = (req, res) => {
     res.status(isValidAccount ? status.OK : status.NOT_FOUND);
     return res.json({
         status: isValidAccount ? 'success' : 'error',
-        message: isValidAccount ? 'Authenticated' : 'Invalid credentials'
+        message: isValidAccount ? 'Authenticated' : 'Invalid credentials',
+        data: isValidAccount ? { username, authToken: uuid(), validTill: add(new Date().toISOString(), {hours: 1})} : null
     });
 }
 

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import SigninForm from '../components/SigninForm';
-import { useHistory } from 'react-router-dom';
+import authStore from '../common/authstore';
+import { Redirect } from 'react-router-dom';
 
 const LoginContainer = styled.div`
     box-sizing: border-box;
@@ -9,24 +10,22 @@ const LoginContainer = styled.div`
     align-items: center;
     justify-content: center;
 `
-const Login = ({setUsername}) => {
-    const history = useHistory();
+const Login = (props) => {
+    const [redirectToReferrer, setRedirect] = useState(false);
+    const { from } = props.location.state || { from: { pathname: '/' } }
     const onSubmit = async (loginData) => {
-        console.log('in submit', loginData);
-        const res = await fetch('http://localhost:3000/login', {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json;charset=UTF-8',
-            },
-            body: JSON.stringify(loginData)
-        });        
-        const response = await res.json();
-        console.log(response);
-        if(response.status === 'success') {
-            setUsername(loginData.username)
-            return history.push('/dashboard');
+        try {
+            const response = await authStore.authenticate(loginData);
+            console.log('response', response);
+            if(response.status === 'success') {
+                setRedirect(true);
+            }
+        } catch (e) {
+            console.log('login failed');
         }
-        console.log('login failed');
+    }
+    if (redirectToReferrer) {
+        return <Redirect to={from} />
     }
     return (
         <LoginContainer>
