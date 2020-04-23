@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import AddButton from '../components/AddButton';
 import CloseButton from '../components/CloseButton';
 import List from '../components/List';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import 'react-responsive-modal/styles.css';
 import Modal from 'react-responsive-modal';
 import { withLoader, deleteList, createList, getLists } from '../common/utils';
@@ -79,7 +79,9 @@ const Board = ({Loader}) => {
     }
     return (
         <BoardContainer>
-            <CloseButton />
+            <Link to="/dashboard">
+                <CloseButton />
+            </Link>
             <ListsContainer>
                 { isLoading && <Loader size="large" /> }
                 { !isLoading && lists.map(list => <List list={list} deleteList={handleDeleteList} key={list.id} />) }

@@ -11,6 +11,12 @@
       "name": "posts",
       "createdAt": 1587229768280,
       "username": "sid"
+    },
+    {
+      "id": "32f9a475-73d0-4f41-a454-502fdd609792",
+      "name": "new",
+      "createdAt": 1587670798514,
+      "username": "sid"
     }
   ],
   "lists": [
