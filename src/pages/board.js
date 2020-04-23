@@ -44,7 +44,7 @@ const Board = ({Loader}) => {
             }
             setLoading(false);
         }
-        setTimeout(fetchLists, 3000);
+        setTimeout(fetchLists, 2000);
     }, [boardId]);
 
     const handleListNameChange = (event) => {

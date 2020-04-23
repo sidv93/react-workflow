@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import SigninForm from '../components/SigninForm';
 import authStore from '../common/authstore';
@@ -9,10 +9,11 @@ const LoginContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-`
+`;
+
 const Login = (props) => {
-    const [redirectToReferrer, setRedirect] = useState(false);
-    const { from } = props.location.state || { from: { pathname: '/' } }
+    const [redirectToReferrer, setRedirect] = useState(authStore.isAuthenticated);
+    const { from } = props.location.state || { from: { pathname: '/' } };
     const onSubmit = async (loginData) => {
         try {
             const response = await authStore.authenticate(loginData);
@@ -21,9 +22,17 @@ const Login = (props) => {
                 setRedirect(true);
             }
         } catch (e) {
-            console.log('login failed');
+            console.log('login failed', e);
         }
     }
+
+    useEffect(() => {
+        authStore.checkExistingLogins();
+        if(authStore.isAuthenticated) {
+            setRedirect(true);
+        }
+    }, [redirectToReferrer]);
+
     if (redirectToReferrer) {
         return <Redirect to={from} />
     }

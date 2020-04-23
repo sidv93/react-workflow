@@ -25,7 +25,6 @@ const ContentContainer = styled.div`
 function App() {
   const headerText = 'Welcome to Workflow!';
   const footerText = 'Copyright © 2020 Asteria Aerospace | All Rights Reserved.';
-
   return (
     <Router>
       <MainContainer>

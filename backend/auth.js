@@ -16,11 +16,23 @@ const login = (req, res) => {
     }
     const isValidAccount = db.get('accounts').value().some(account => account.username === username && account.password === password);
     console.log(isValidAccount);
-    res.status(isValidAccount ? status.OK : status.NOT_FOUND);
+    if(!isValidAccount) {
+        res.status(status.NOT_FOUND);
+        return res.json({
+            status: 'failure',
+            messgae: 'Invalid credentials'
+        });
+    }
+    const response = {
+        username,
+        authToken: uuid(),
+        validTill: add(new Date(), {hours: 1}).toISOString()
+    }
+    res.status(status.OK);
     return res.json({
-        status: isValidAccount ? 'success' : 'error',
-        message: isValidAccount ? 'Authenticated' : 'Invalid credentials',
-        data: isValidAccount ? { username, authToken: uuid(), validTill: add(new Date().toISOString(), {hours: 1})} : null
+        status: 'success',
+        message: 'Authenticated',
+        data: response
     });
 }
 

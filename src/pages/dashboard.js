@@ -50,7 +50,7 @@ const Dashboard = ({Loader}) => {
             }
             setLoading(false);
         }
-        setTimeout(fetchBoards, 3000);
+        setTimeout(fetchBoards, 2000);
     }, [username])
     const history = useHistory();
     const handleClick = (boardId) => {
