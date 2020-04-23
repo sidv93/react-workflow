@@ -22,12 +22,12 @@ const BoardBody = styled.div`
     font-size: 1rem;
 `;
 
-const Board = ({board, handleClick}) => {
+const Board = ({board, handleClick, handleDelete}) => {
     return (
         <BoardComponent>
             <BoardHeader>
                 <span>{new Date(board.createdAt).toLocaleDateString()}</span>
-                <span style={{cursor: 'pointer'}}>
+                <span style={{cursor: 'pointer'}} onClick={() => handleDelete({boardId: board.id})} >
                     <i className="fa fa-times" />
                 </span>
             </BoardHeader>

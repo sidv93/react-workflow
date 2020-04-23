@@ -6,7 +6,7 @@ import List from '../components/List';
 import { useParams } from 'react-router-dom';
 import 'react-responsive-modal/styles.css';
 import Modal from 'react-responsive-modal';
-import { withLoader } from '../common/utils';
+import { withLoader, deleteList, createList, getLists } from '../common/utils';
 
 const BoardContainer = styled.div`
     max-width: 100vw;
@@ -27,6 +27,7 @@ const Board = ({Loader}) => {
     const [ isModalOpen, setModalState ] = useState(false);
     const [ listName, setListName ] = useState('');
     const [ isLoading, setLoading ] = useState(false);
+    const [isModalLoading, setModalLoading] = useState(false);
     useEffect(() => {
         setLoading(true);
         const fetchLists = async () => {
@@ -34,11 +35,8 @@ const Board = ({Loader}) => {
                 setLoading(false);
                 return;
             }
-            const res = await fetch(`http://localhost:3000/lists/${boardId}`, {
-                method: 'GET'
-            });
-            const response = await res.json();
-            console.log('lists', response.data);
+            const response = await getLists({boardId});
+            console.log('lists', response);
             if(response.status === 'success') {
                 setLists(response.data);
             }
@@ -50,9 +48,17 @@ const Board = ({Loader}) => {
     const handleListNameChange = (event) => {
         setListName(event.target.value);
     }
-    const handleListNameSubmit = (event) => {
+    const handleListNameSubmit = async (event) => {
         event.preventDefault();
-        console.log('listname', listName);
+        setModalLoading(true);
+        setTimeout(async () => {
+            const response = await createList({listName, boardId});
+            console.log('resposne', response);
+            if(response.status === 'success') {
+                setLists([...lists, response.data]);
+            }
+            setModalLoading(false);
+        }, 2000);
         closeModal();
     }
     const openModal = () => {
@@ -61,23 +67,35 @@ const Board = ({Loader}) => {
     const closeModal = () => {
         setModalState(false);
     }
+    const handleDeleteList = async ({listId}) => {
+        setLoading(true);
+        setTimeout(async () => {
+            const response = await deleteList({listId});
+            if(response.status === 'success') {
+                setLists(lists.filter(list => list.id !== listId));
+            }
+            setLoading(false);
+        }, 2000);
+    }
     return (
         <BoardContainer>
             <CloseButton />
             <ListsContainer>
                 { isLoading && <Loader size="large" /> }
-                {
-                    lists.map(list => <List list={list} key={list.id} />)
-                }
+                { !isLoading && lists.map(list => <List list={list} deleteList={handleDeleteList} key={list.id} />) }
             </ListsContainer>
             <AddButton onClick={openModal} />
             <Modal open={isModalOpen} onClose={closeModal} center>
                 <h2>Create List</h2>
-                <form onSubmit={handleListNameSubmit}>
-                    <label htmlFor="listname" />
-                    <input type="text" name="listame" value={listName} onChange={handleListNameChange} placeholder="List name" />
-                    <input type="submit" value="Submit" />
-                </form>
+                { isModalLoading && <Loader size="large" /> }
+                {
+                    !isModalLoading &&
+                    <form onSubmit={handleListNameSubmit}>
+                        <label htmlFor="listname" />
+                        <input type="text" name="listame" value={listName} onChange={handleListNameChange} placeholder="List name" />
+                        <input type="submit" value="Submit" />
+                    </form>
+                }
             </Modal>
         </BoardContainer>
     )

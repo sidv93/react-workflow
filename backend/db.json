@@ -11,20 +11,20 @@
       "name": "posts",
       "createdAt": 1587229768280,
       "username": "sid"
-    },
-    {
-      "id": "3b77f789-de05-4bd0-9155-afe4975c3c07",
-      "name": "teams",
-      "createdAt": 1587230049354,
-      "username": "sid"
     }
   ],
   "lists": [
     {
-      "id": "84b622f0-0d56-4ef2-b5e1-03a18ebc93a3",
+      "id": "675dd204-64f7-4b81-9386-3fc23d4a7fe9",
       "boardId": "3b8ce1f7-b8c0-4e76-aeef-bae019867c73",
-      "name": "postList",
-      "createdAt": 1587229828326
+      "name": "list1",
+      "createdAt": 1587670101264
+    },
+    {
+      "id": "88f4085e-7b09-4d98-8de5-576682616b1b",
+      "boardId": "3b8ce1f7-b8c0-4e76-aeef-bae019867c73",
+      "name": "list2",
+      "createdAt": 1587670112008
     }
   ],
   "cards": [

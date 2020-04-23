@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Card from './Card';
+import { getCards } from '../common/utils';
 
 const ListComponent = styled.div`
     box-shadow: -1px 0px 5px 1px rgba(179,179,179,1);
@@ -46,18 +47,15 @@ const OrderedList = styled.ul`
     padding: 0;
 `;
 
-const List = ({list}) => {
+const List = ({list, deleteList}) => {
     const [cards, setCards] = useState([]);
     useEffect(() => {
         const fetchCards = async () => {
             if(!list) {
                 return;
             }
-            const res = await fetch(`http://localhost:3000/cards/${list.id}`, {
-                method: 'GET'
-            });
-            const response = await res.json();
-            console.log('cards', response.data);
+            const response = await getCards({listId: list.id});
+            console.log('cards', response);
             if(response.status === 'success') {
                 setCards(response.data);
             }
@@ -70,7 +68,7 @@ const List = ({list}) => {
                 <h3>{list.name}</h3>
                 <HeaderOptionsContainer>
                     <HeaderOptions><i className="fa fa-plus-square" /></HeaderOptions>
-                    <HeaderOptions><i className="fa fa-trash" /></HeaderOptions>
+                    <HeaderOptions onClick={() => deleteList({listId: list.id})}><i className="fa fa-trash" /></HeaderOptions>
                 </HeaderOptionsContainer>
             </ListHeader>
             <HorizontalLine />

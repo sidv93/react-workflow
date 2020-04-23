@@ -5,8 +5,9 @@ import AddButton from '../components/AddButton';
 import { useHistory } from 'react-router-dom';
 import 'react-responsive-modal/styles.css';
 import Modal from 'react-responsive-modal';
-import { withLoader } from '../common/utils';
+import { withLoader, getBoards } from '../common/utils';
 import authStore from '../common/authstore';
+import { createBoard, deleteBoard } from '../common/utils';
 
 const DashboardContainer = styled.div`
     max-width: 100vw;
@@ -25,7 +26,8 @@ const Dashboard = ({Loader}) => {
     const [ boards, setBoards ] = useState([]);
     const [ isModalOpen, setModalState ] = useState(false);
     const [ boardName, setBoardName ] = useState('');
-    let [ isLoading, setLoading ] = useState(false);
+    const [ isLoading, setLoading ] = useState(false);
+    const [isModalLoader, setModalLoader] = useState(false);
     const username = authStore.userDetails.username;
     const openModal = () => {
         setModalState(true);
@@ -40,11 +42,8 @@ const Dashboard = ({Loader}) => {
                 setLoading(false);
                 return;
             }
-            const res = await fetch(`http://localhost:3000/boards/${username}`, {
-                method: 'GET'
-            });
-            const response = await res.json();
-            console.log('boards', response.data);
+            const response = await getBoards({username});
+            console.log('boards', response);
             if(response.status === 'success') {
                 setBoards(response.data);
             }
@@ -59,29 +58,49 @@ const Dashboard = ({Loader}) => {
     const handleBoardNameChange = (event) => {
         setBoardName(event.target.value);
     }
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log('boardname', boardName);
+        setModalLoader(true);
+        const response = await createBoard({boardName});
+        setModalLoader(false);
+        if(response.status === 'success') {
+            setBoards([...boards,response.data]);
+        } 
         closeModal();
+    };
+    const handleDeleteBoard = async ({boardId}) => {
+        setLoading(true);
+        const response =  await deleteBoard({boardId});
+        if(response.status === 'success') {
+            
+            setBoards(boards.filter(board => board.id !== boardId));
+        }
+        setLoading(false);
     }
     return (
         <DashboardContainer>
             <BoardsContainer>
                 {isLoading && <Loader size="large" />}
-                {
+                {!isLoading &&
                     boards.map(board => {
-                        return <Board board={board} handleClick={handleClick} key={board.id} />
+                        return <Board board={board} handleClick={handleClick} handleDelete={handleDeleteBoard} key={board.id} />
                     })
                 }
             </BoardsContainer>
             <AddButton onClick={openModal} />
             <Modal open={isModalOpen} onClose={closeModal} center>
                 <h2>Create Board</h2>
-                <form onSubmit={handleSubmit}>
-                    <label htmlFor="boardName" />
-                    <input type="text" name="boardName" value={boardName} onChange={handleBoardNameChange} placeholder="Board name" />
-                    <input type="submit" value="Submit" />
-                </form>
+                {
+                    isModalLoader && <Loader size="medium" />
+                }
+                {
+                    !isModalLoader && <form onSubmit={handleSubmit}>
+                        <label htmlFor="boardName" />
+                        <input type="text" name="boardName" value={boardName} onChange={handleBoardNameChange} placeholder="Board name" />
+                        <input type="submit" value="Submit" />
+                    </form>
+                }
+                
                 
             </Modal>
         </DashboardContainer>
