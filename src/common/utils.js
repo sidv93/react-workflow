@@ -15,18 +15,15 @@ export const withLoader = Component => {
 };
 
 export const setBoard = (boardname) => {
-    console.log(`setting board`, boardname);
     boardName = boardname;
 }
 
 export const Headerwithtext = () => {
     const location = useLocation();
-    console.log('location', location);
     let text;
     if(location.pathname.includes('dashboard')) {
         text = `Welcome to workflow, ${authStore.userDetails.username}`;
     } else if(location.pathname.includes('board')) {
-        console.log('boardname', boardName);
         text = `${boardName}`;
     } else {
         text = 'Welcome to Workflow';

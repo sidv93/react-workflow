@@ -31,7 +31,7 @@ const authFunctions = {
     checkExistingLogins() {
         const userDetails = this.fetchLocalStorageData();
         if(!userDetails) return;
-        if(compareAsc(new Date(userDetails.validTill), new Date())) {
+        if(compareAsc(new Date(userDetails.validTill), new Date()) > 0) {
             this.userDetails = userDetails;
             this.isAuthenticated = true;
         }
