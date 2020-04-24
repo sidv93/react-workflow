@@ -7,6 +7,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import authStore from './common/authstore';
+import { Headerwithtext } from './common/utils';
 
 const MainContainer = styled.div`
   min-height: 100vh;
@@ -23,12 +24,11 @@ const ContentContainer = styled.div`
 `;
 
 function App() {
-  const headerText = 'Welcome to Workflow!';
   const footerText = 'Copyright © 2020 Asteria Aerospace | All Rights Reserved.';
   return (
     <Router>
       <MainContainer>
-        <Header text={headerText} />
+        <Headerwithtext />
         <ContentContainer>
         <Switch>
           <PrivateRoute path='/dashboard' component={Dashboard} />
@@ -52,6 +52,6 @@ const PrivateRoute = ({component: Component, ...rest}) => (
         state: { from: props.location }
       }} /> 
   )} />
-)
+);
 
 export default App;

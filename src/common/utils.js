@@ -1,6 +1,9 @@
 import React from 'react';
 import authStore from './authstore';
+import { useLocation } from 'react-router-dom';
+import Header from '../components/Header';
 
+let boardName = '';
 export const withLoader = Component => {
     const sizes = {
         small: '24px',
@@ -10,6 +13,26 @@ export const withLoader = Component => {
     const loader = ({size}) => <i style={{fontSize: sizes[size]}} className="fa fa-spinner fa-spin" />;
     return props => <Component Loader={loader} {...props} />;
 };
+
+export const setBoard = (boardname) => {
+    console.log(`setting board`, boardname);
+    boardName = boardname;
+}
+
+export const Headerwithtext = () => {
+    const location = useLocation();
+    console.log('location', location);
+    let text;
+    if(location.pathname.includes('dashboard')) {
+        text = `Welcome to workflow, ${authStore.userDetails.username}`;
+    } else if(location.pathname.includes('board')) {
+        console.log('boardname', boardName);
+        text = `${boardName}`;
+    } else {
+        text = 'Welcome to Workflow';
+    }
+    return <Header text={text} />
+}
 
 export const getBoards = async ({username}) => {
     const res = await fetch(`http://localhost:3000/boards/${username}`, {

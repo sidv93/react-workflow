@@ -7,7 +7,7 @@ import 'react-responsive-modal/styles.css';
 import Modal from 'react-responsive-modal';
 import { withLoader, getBoards } from '../common/utils';
 import authStore from '../common/authstore';
-import { createBoard, deleteBoard } from '../common/utils';
+import { createBoard, deleteBoard, setBoard } from '../common/utils';
 
 const DashboardContainer = styled.div`
     max-width: 100vw;
@@ -49,11 +49,12 @@ const Dashboard = ({Loader}) => {
             }
             setLoading(false);
         }
-        setTimeout(fetchBoards, 2000);
+        setTimeout(fetchBoards, 1000);
     }, [username])
     const history = useHistory();
-    const handleClick = (boardId) => {
-        history.push(`/board/${boardId}`);
+    const handleClick = (board) => {
+        setBoard(board.name);
+        history.push(`/board/${board.id}`);
     }
     const handleBoardNameChange = (event) => {
         setBoardName(event.target.value);
@@ -72,7 +73,6 @@ const Dashboard = ({Loader}) => {
         setLoading(true);
         const response =  await deleteBoard({boardId});
         if(response.status === 'success') {
-            
             setBoards(boards.filter(board => board.id !== boardId));
         }
         setLoading(false);

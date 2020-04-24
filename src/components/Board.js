@@ -31,7 +31,7 @@ const Board = ({board, handleClick, handleDelete}) => {
                     <i className="fa fa-times" />
                 </span>
             </BoardHeader>
-            <BoardBody onClick={() => handleClick(board.id)}>
+            <BoardBody onClick={() => handleClick(board)}>
                 <p>{board.name}</p>
             </BoardBody>
         </BoardComponent>

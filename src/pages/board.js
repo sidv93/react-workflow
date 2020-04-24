@@ -22,11 +22,11 @@ const ListsContainer = styled.div`
 `;
 
 const Board = ({Loader}) => {
-    const { boardId } = useParams();
-    const [ lists, setLists ] = useState([]);
-    const [ isModalOpen, setModalState ] = useState(false);
-    const [ listName, setListName ] = useState('');
-    const [ isLoading, setLoading ] = useState(false);
+    const {boardId} = useParams();
+    const [lists, setLists] = useState([]);
+    const [isModalOpen, setModalState] = useState(false);
+    const [listName, setListName] = useState('');
+    const [isLoading, setLoading] = useState(false);
     const [isModalLoading, setModalLoading] = useState(false);
     useEffect(() => {
         setLoading(true);
@@ -42,7 +42,7 @@ const Board = ({Loader}) => {
             }
             setLoading(false);
         }
-        setTimeout(fetchLists, 2000);
+        setTimeout(fetchLists, 1000);
     }, [boardId]);
 
     const handleListNameChange = (event) => {
